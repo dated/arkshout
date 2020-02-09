@@ -10,7 +10,9 @@
 yarn global add @dated/arkshout
 ```
 
-## `arkshout config`
+## Usage
+
+### `arkshout config`
 
 Update the configuration
 
@@ -19,7 +21,7 @@ USAGE
   $ arkshout config
 ```
 
-## `arkshout config:network`
+### `arkshout config:network`
 
 Configure the network
 
@@ -36,7 +38,7 @@ EXAMPLES
   $ arkshout config:network --network=devnet --host=https://dexplorer.ark.io/api
 ```
 
-## `arkshout config:delegate`
+### `arkshout config:delegate`
 
 Configure your delegate
 
@@ -56,7 +58,7 @@ EXAMPLES
   $ arkshout config:delegate --publicKey=02cb93172a19a66e236baedb382b3c9013ddd4238c89e6eb739d20b362010c00c1
 ```
 
-## `arkshout config:transactions`
+### `arkshout config:transactions`
 
 Configure your transactions
 
@@ -64,7 +66,7 @@ Configure your transactions
 ...
 ```
 
-## `arkshout message`
+### `arkshout message`
 
 Send a message to your voters
 
@@ -77,6 +79,7 @@ OPTIONS
   --fee=fee                   The fee used for each transaction
   --minVote=minVote           The minimum vote weight of your voters
   --multiPayment=multiPayment Use multi payments over regular transfers
+  --passphrase=passphrase     The passphrase of the wallet used to send your message
   --vendorField=vendorField   The message you want to send to each voter
 ```
 

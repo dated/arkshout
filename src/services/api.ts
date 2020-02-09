@@ -8,19 +8,19 @@ class ApiService {
         return response.body;
     }
 
-    private async post(url: string, withStatus = false, params?: any) {
+    private async post(url: string, params?: any) {
         const response = await httpie.post(`${ConfigService.get("host")}/${url}`, params);
-        return withStatus ? { body: response.body, status: response.status } : response.body;
+        return response;
     }
 
     public async blockchain() {
-        const response = await this.get("blockchain");
-        return response.data;
+        const body = await this.get("blockchain");
+        return body.data;
     }
 
     public async retrieveWallet(id: string) {
-        const response = await this.get(`wallets/${id}`);
-        return response.data;
+        const body = await this.get(`wallets/${id}`);
+        return body.data;
     }
 
     public async retrieveVoters(vote: string, threshold: string) {
@@ -31,7 +31,7 @@ class ApiService {
 
         do {
             // eslint-disable-next-line no-await-in-loop
-            const { data, meta } = await this.post("wallets/search", false, {
+            const { body } = await this.post("wallets/search", {
                 headers: { "Content-Type": "application/json" },
                 query: {
                     page,
@@ -46,17 +46,17 @@ class ApiService {
                 },
             });
 
-            next = meta.next;
+            next = body.meta.next;
             page++;
 
-            voters.push(...data.map((voter: any) => voter.address));
+            voters.push(...body.data.map((voter: any) => voter.address));
         } while (next);
 
         return voters;
     }
 
     public async postTransactions(transactions: any) {
-        const { status, body } = await this.post("transactions", true, {
+        const { body, status } = await this.post("transactions", {
             headers: { "Content-Type": "application/json" },
             retry: {
                 retries: 3,
@@ -67,7 +67,7 @@ class ApiService {
         });
 
         if (status !== 200 || body.errors) {
-            throw new Error(JSON.stringify(body.errors));
+            throw new Error(JSON.stringify(body));
         }
     }
 }

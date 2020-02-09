@@ -25,20 +25,6 @@ class ConfigService {
         this.write({ ...this.read(), ...data });
     }
 
-    public isNetworkConfigured(): boolean {
-        return this.get("network") !== undefined;
-    }
-
-    public isDelegateConfigured(): boolean {
-        return this.get("delegate") !== undefined;
-    }
-
-    public isTransactionsConfigured(): boolean {
-        return ["amount", "fee", "minVote", "multiPayment", "passphrase"].every(key => {
-            return this.get(key) !== undefined;
-        });
-    }
-
     private ensureDefaults(): void {
         if (!this.read()) {
             removeSync(this.file);

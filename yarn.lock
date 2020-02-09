@@ -33,7 +33,7 @@
     awilix "^4.2.2"
     dayjs "^1.8.15"
 
-"@arkecosystem/core-utils@^2.6.0-next.9":
+"@arkecosystem/core-utils@^2.6.0-next.10":
   version "2.6.0-next.10"
   resolved "https://registry.yarnpkg.com/@arkecosystem/core-utils/-/core-utils-2.6.0-next.10.tgz#ee85997ce15488408ab91d43e341c336cacb8078"
   integrity sha512-tmZQUmCIJ0bZxjxoMsFVLn8mIuF9NOIRC4Bv92fzH0/niyJ6cEZ3naqlN9VFdBzKB1VBdL702ZLcaJHvry50Tw==
@@ -48,7 +48,7 @@
     immutable "^4.0.0-rc.12"
     nanomatch "^1.2.13"
 
-"@arkecosystem/crypto@^2.6.0-next.10", "@arkecosystem/crypto@^2.6.0-next.9":
+"@arkecosystem/crypto@^2.6.0-next.10":
   version "2.6.0-next.10"
   resolved "https://registry.yarnpkg.com/@arkecosystem/crypto/-/crypto-2.6.0-next.10.tgz#9b255caeda6a73e0faf92d55973169ac8fc3243c"
   integrity sha512-tKdheaKBNPw/Y00xLqUQ68r09I7gvv1JdUP7DFYbSk00BmWlSkA4yiKR3D569N2HNDhjurE88XG2mVkpqKZ9gQ==

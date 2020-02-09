@@ -5,9 +5,11 @@ import { CommandFlags } from "../types";
 import ConfigService from "../services/config";
 import { confirm } from "../shared/prompts";
 import { capitalize } from "../shared/utils";
+import { ConfigFeesCommand } from "./config/fees";
 import { ConfigDelegateCommand } from "./config/delegate";
+import { ConfigMinVoteCommand } from "./config/minvote";
 import { ConfigNetworkCommand } from "./config/network";
-import { ConfigTransactionsCommand } from "./config/transactions";
+import { ConfigPassphraseCommand } from "./config/passphrase";
 import ApiService from "../services/api";
 import TransactionService from "../services/transaction";
 import chunk from "lodash.chunk";
@@ -18,40 +20,24 @@ export class MessageCommand extends Command {
     static description = "Send a message to your voters";
 
     public static flags: CommandFlags = {
-        amount: flags.string({
-            description: "The amount used for each transaction",
-        }),
-        fee: flags.string({
-            description: "The fee used for each transaction",
-        }),
-        minVote: flags.string({
-            description: "The minimum vote weight of your voters",
-        }),
-        passphrase: flags.string({
-            description: "The passphrase of the wallet used to send your message",
-        }),
-        multiPayment: flags.boolean({
-            description: "Use multi payments over regular transfers",
-        }),
         vendorField: flags.string({
             description: "The message you want to send to each voter",
+        }),
+        multi: flags.boolean({
+            description: "Use multi payments over regular transfers",
+            default: true,
+            allowNo: true,
         }),
     };
 
     public async run(): Promise<void> {
         const { flags } = await this.parse(MessageCommand);
 
-        const config = ConfigService.all();
+        const config = { ...ConfigService.all(), ...flags };
 
-        for (const [flag, value] of Object.entries(flags)) {
-            config[flag] = value;
-        }
-
-        let response;
-
-        for (const setting of ["network", "delegate"]) {
+        for (const setting of ["network", "delegate", "fees", "minVote", "passphrases"]) {
             // @ts-ignore
-            if (!config[setting] && !ConfigService[`is${capitalize(setting)}Configured`]()) {
+            if (!config[setting] && !ConfigService.get(setting)) {
                 this.warn(`There are no settings for ${Chalk.greenBright(setting)} yet.`);
 
                 // eslint-disable-next-line no-await-in-loop
@@ -67,35 +53,29 @@ export class MessageCommand extends Command {
                                 await ConfigDelegateCommand.run([]);
                                 break;
                             }
-                            case "transactions": {
-                                await ConfigTransactionsCommand.run([]);
+                            case "fees": {
+                                await ConfigFeesCommand.run([]);
+                                break;
+                            }
+                            case "minVote": {
+                                await ConfigMinVoteCommand.run([]);
+                                break;
+                            }
+                            case "passphrases": {
+                                await ConfigPassphraseCommand.run([]);
                                 break;
                             }
                         }
                     },
                     () => {
-                        this.error(`You need to configure the ${setting} to continue!`);
+                        this.error(`You need to configure ${setting} to continue!`);
                     },
                 );
             }
         }
 
-        if (["amount", "fee", "minVote", "passphrase", "multiPayment"].some(setting => config[setting] === undefined)) {
-            this.warn(`Some settings for ${Chalk.greenBright("transactions")} appear to be missing.`);
-
-            await confirm(
-                { message: "Configure now?", initial: true },
-                async () => {
-                    await ConfigTransactionsCommand.run([]);
-                },
-                () => {
-                    this.error("You need to configure the transactions to continue!");
-                },
-            );
-        }
-
         if (!config.vendorField) {
-            response = await prompts([
+            const response = await prompts([
                 {
                     type: "text",
                     name: "vendorField",
@@ -113,9 +93,8 @@ export class MessageCommand extends Command {
         let voters: any[] = [];
 
         try {
-            const minVote = ConfigService.get("minVote");
-            cli.action.start(`- Retrieving voters with a minimum of ${minVote} ARK`);
-            voters = await ApiService.retrieveVoters(ConfigService.get("delegate"), minVote);
+            cli.action.start(`- Retrieving voters with a minimum of ${config.minVote}`);
+            voters = await ApiService.retrieveVoters(config.delegate, config.minVote);
         } catch (error) {
             this.error("Failed to retrieve your voters!");
         } finally {
@@ -131,7 +110,8 @@ export class MessageCommand extends Command {
                     const height = (await ApiService.blockchain()).block.height;
                     Managers.configManager.setHeight(height);
 
-                    const sender = Identities.Address.fromPassphrase(config.passphrase);
+                    const sender = Identities.Address.fromPassphrase(config.passphrases.first);
+
                     const { nonce } = await ApiService.retrieveWallet(sender);
                     config.nonce = Utils.BigNumber.make(nonce);
 
@@ -139,27 +119,35 @@ export class MessageCommand extends Command {
 
                     const transactions = [];
 
+                    cli.action.start("- Building transactions");
                     for (const recipients of chunk(voters, multiPaymentLimit)) {
-                        config.nonce = config.nonce.plus(1);
-
-                        if (config.multiPayment && recipients.length > 1) {
+                        if (config.multi && recipients.length > 1) {
+                            config.nonce = config.nonce.plus(1);
                             transactions.push(TransactionService.buildMultiPayment(recipients, config));
                         } else {
                             for (const recipient of recipients) {
+                                config.nonce = config.nonce.plus(1);
                                 transactions.push(TransactionService.buildTransfer(recipient, config));
                             }
                         }
                     }
+                    cli.action.stop(`built ${transactions.length} transactions`);
 
-                    console.log(transactions);
+                    let count = 0;
 
                     try {
+                        cli.action.start("- Sending transactions");
                         for (const batch of chunk(transactions, 40)) {
                             // eslint-disable-next-line no-await-in-loop
                             await ApiService.postTransactions(batch);
+                            count += batch.length;
                         }
                     } catch (error) {
-                        this.error(error.message);
+                        const response = JSON.parse(error.message);
+                        count += response.data.accept.length;
+                        this.error(JSON.stringify(response.errors));
+                    } finally {
+                        cli.action.stop(`sent ${count} transactions`);
                     }
                 },
             );

@@ -1,7 +1,9 @@
 import Command from "@oclif/command";
+import { ConfigFeesCommand } from "./fees";
 import { ConfigDelegateCommand } from "./delegate";
+import { ConfigMinVoteCommand } from "./minvote";
 import { ConfigNetworkCommand } from "./network";
-import { ConfigTransactionsCommand } from "./transactions";
+import { ConfigPassphraseCommand } from "./passphrase";
 import prompts from "prompts";
 
 export class ConfigCommand extends Command {
@@ -16,7 +18,9 @@ export class ConfigCommand extends Command {
                 choices: [
                     { title: "Network", value: "network" },
                     { title: "Delegate", value: "delegate" },
-                    { title: "Transactions", value: "transactions" },
+                    { title: "Fees", value: "fees" },
+                    { title: "Minimum vote", value: "minVote" },
+                    { title: "Passphrases", value: "passphrases" },
                 ],
             },
         ]);
@@ -34,8 +38,16 @@ export class ConfigCommand extends Command {
                 await ConfigDelegateCommand.run([]);
                 break;
             }
-            case "transactions": {
-                await ConfigTransactionsCommand.run([]);
+            case "fees": {
+                await ConfigFeesCommand.run([]);
+                break;
+            }
+            case "minVote": {
+                await ConfigMinVoteCommand.run([]);
+                break;
+            }
+            case "passphrases": {
+                await ConfigPassphraseCommand.run([]);
                 break;
             }
         }
