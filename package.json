@@ -1,0 +1,93 @@
+{
+  "name": "@dated/arkshout",
+  "description": "Keep in touch with your voters.",
+  "version": "0.0.1",
+  "author": "Edgar Goetzendorff @dated",
+  "bin": {
+    "arkshout": "./bin/run"
+  },
+  "bugs": "https://github.com/dated/arkshout/issues",
+  "dependencies": {
+    "@arkecosystem/core-utils": "^2.6.0-next.9",
+    "@arkecosystem/crypto": "^2.6.0-next.9",
+    "@oclif/command": "^1",
+    "@oclif/config": "^1.14.0",
+    "@oclif/plugin-help": "^2",
+    "chalk": "^3.0.0",
+    "cli-ux": "^5.4.4",
+    "dotenv": "^8.2.0",
+    "fs-extra": "^8.1.0",
+    "lodash.chunk": "^4.2.0",
+    "prompts": "^2.3.0",
+    "tslib": "^1"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@oclif/test": "^1",
+    "@sindresorhus/tsconfig": "^0.7.0",
+    "@types/bytebuffer": "^5.0.40",
+    "@types/chai": "^4",
+    "@types/fs-extra": "^8.0.1",
+    "@types/lodash.chunk": "^4.2.6",
+    "@types/mocha": "^5",
+    "@types/node": "^10",
+    "@types/prettier": "^1.19.0",
+    "@types/prompts": "^2.0.3",
+    "@typescript-eslint/eslint-plugin": "^2.19.0",
+    "@typescript-eslint/parser": "^2.19.0",
+    "chai": "^4",
+    "del-cli": "^3.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-oclif": "^3.1",
+    "eslint-config-oclif-typescript": "^0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "globby": "^10",
+    "mocha": "^5",
+    "nyc": "^14",
+    "prettier": "^1.19.1",
+    "prettier-eslint": "^9.0.1",
+    "ts-node": "^8",
+    "typescript": "^3.7.5"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/dist",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "homepage": "https://github.com/dated/arkshout",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "dist/index",
+  "oclif": {
+    "commands": "./dist/commands",
+    "hooks": {
+      "init": [
+        "./dist/hooks/init/config"
+      ]
+    },
+    "bin": "arkshout",
+    "plugins": [
+      "@oclif/plugin-help"
+    ]
+  },
+  "repository": "dated/arkshout",
+  "scripts": {
+    "arkshout": "./bin/run",
+    "build": "yarn clean && yarn compile",
+    "clean": "del dist",
+    "compile": "./node_modules/typescript/bin/tsc",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf dist && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
+  "types": "dist/index"
+}

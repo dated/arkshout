@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+require("@oclif/command").run()
+.then(require("@oclif/command/flush"))
+.catch(require("@oclif/errors/handle"))
+
+// if (process.argv.length > 2) {
+//   console.log("multi");
+//   require("@oclif/command").run()
+//   .then(require("@oclif/command/flush"))
+//   .catch(require("@oclif/errors/handle"))
+// } else {
+//   console.log("single");
+//   require("../src/commands/menu").run()
+//   .catch(require("@oclif/errors/handle"))
+// }
