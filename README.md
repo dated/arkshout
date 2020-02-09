@@ -56,8 +56,8 @@ USAGE
   $ arkshout config:delegate
 
 OPTIONS
-  --publicKey=publicKey  The public key of your delegate
-  --username=username    The username of your delegate
+  --publicKey=publicKey   The public key of your delegate
+  --username=username     The username of your delegate
 
 EXAMPLES
   Configure your delegate using your username
@@ -76,8 +76,8 @@ USAGE
   $ arkshout config:fees
 
 OPTIONS
-  --transfer=transfer         The fee used for regular transfers
-  --multiPayment=multiPayment The fee used for multi payments
+  --transfer=transfer           The fee used for regular transfers
+  --multiPayment=multiPayment   The fee used for multi payments
 
 EXAMPLES
   Configure the fee used for regular transfer
@@ -96,8 +96,8 @@ USAGE
   $ arkshout config:passphrase
 
 OPTIONS
-  --first=passphrase Your passphrase
-  --first=passphrase Your second passphrase
+  --first=passphrase    Your passphrase
+  --second=passphrase   Your second passphrase
 
 EXAMPLES
   Configure the first passphrase
