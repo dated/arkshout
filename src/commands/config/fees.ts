@@ -1,8 +1,6 @@
 import Command, { flags } from "@oclif/command";
-import { Identities } from "@arkecosystem/crypto";
 import { CommandFlags } from "../../types";
 import ConfigService from "../../services/config";
-import ApiService from "../../services/api";
 import Chalk from "chalk";
 import prompts from "prompts";
 

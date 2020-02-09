@@ -13,15 +13,15 @@ class ConfigService {
         return this.read();
     }
 
-    public get(key: string): string {
+    public get(key: string): any {
         return this.read()[key];
     }
 
-    public set(key: string, value: string): void {
+    public set(key: string, value: any): void {
         this.update({ [key]: value });
     }
 
-    public update(data: Record<string, string>): void {
+    public update(data: Record<string, any>): void {
         this.write({ ...this.read(), ...data });
     }
 

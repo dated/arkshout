@@ -1,7 +1,6 @@
 import Command, { flags } from "@oclif/command";
 import { CommandFlags } from "../../types";
 import ConfigService from "../../services/config";
-import Chalk from "chalk";
 import prompts from "prompts";
 
 export class ConfigPassphraseCommand extends Command {
@@ -31,7 +30,7 @@ $ arkshout config:passphrase --second=my second passphrase
         for (const passphrase of Object.keys(ConfigPassphraseCommand.flags)) {
             if (flags[passphrase]) {
                 ConfigService.set("passphrases", {
-                    ...ConfigService.passphrases,
+                    ...ConfigService.get("passphrases"),
                     [passphrase]: flags[passphrase],
                 });
             } else {
@@ -41,7 +40,7 @@ $ arkshout config:passphrase --second=my second passphrase
                         type: "password",
                         name: passphrase,
                         message: ConfigPassphraseCommand.flags[passphrase].description,
-                        initial: ConfigService.get("passphrases")?.[passphrase],
+                        initial: ConfigService.get("passphrases")?.[passphrase as string],
                     },
                 ]);
 

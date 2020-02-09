@@ -4,7 +4,6 @@ import { Identities, Managers, Utils } from "@arkecosystem/crypto";
 import { CommandFlags } from "../types";
 import ConfigService from "../services/config";
 import { confirm } from "../shared/prompts";
-import { capitalize } from "../shared/utils";
 import { ConfigFeesCommand } from "./config/fees";
 import { ConfigDelegateCommand } from "./config/delegate";
 import { ConfigMinVoteCommand } from "./config/minvote";

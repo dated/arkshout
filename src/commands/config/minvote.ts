@@ -1,4 +1,4 @@
-import Command, { args } from "@oclif/command";
+import Command from "@oclif/command";
 import ConfigService from "../../services/config";
 import Chalk from "chalk";
 import prompts from "prompts";
@@ -30,7 +30,7 @@ $ arkshout config:minvote 1000
                     type: "text",
                     name: "minVote",
                     message: "Please enter the minimum vote weight used to filter your voters",
-                    initial: ConfigService.minVote || 100,
+                    initial: ConfigService.get("minVote") || 100,
                 },
             ]);
 
