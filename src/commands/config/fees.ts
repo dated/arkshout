@@ -14,7 +14,7 @@ export class ConfigFeesCommand extends Command {
 $ arkshout config:fees --transfer=0.0001
 `,
         `Configure the fee used for multi payments
-$ arkshout config:fees --transfer=0.01
+$ arkshout config:fees --multiPayment=0.01
 `,
     ];
 

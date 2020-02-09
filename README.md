@@ -58,12 +58,44 @@ EXAMPLES
   $ arkshout config:delegate --publicKey=02cb93172a19a66e236baedb382b3c9013ddd4238c89e6eb739d20b362010c00c1
 ```
 
-### `arkshout config:transactions`
+### `arkshout config:fees`
 
-Configure your transactions
+Configure the fees used for your transactions
 
 ```
-...
+USAGE
+  $ arkshout config:fees
+
+OPTIONS
+  --transfer=transfer         The fee used for regular transfers
+  --multiPayment=multiPayment The fee used for multi payments
+
+EXAMPLES
+  Configure the fee used for regular transfer
+  $ arkshout config:fees --transfer=0.0001
+
+  Configure the fee used for multi payments
+  $ arkshout config:fees --multiPayment=0.01
+```
+
+### `arkshout config:passphrase`
+
+Configure the passphrase(s) used to send your transactions
+
+```
+USAGE
+  $ arkshout config:passphrase
+
+OPTIONS
+  --first=passphrase Your passphrase
+  --first=passphrase Your second passphrase
+
+EXAMPLES
+  Configure the first passphrase
+  $ arkshout config:passphrase --first="my first passphrase"
+
+  Configure the second passphrase
+  $ arkshout config:passphrase --second="my second passphrase"
 ```
 
 ### `arkshout message`
@@ -75,12 +107,8 @@ USAGE
   $ arkshout message
 
 OPTIONS
-  --amount=amount             The amount used for each transaction
-  --fee=fee                   The fee used for each transaction
-  --minVote=minVote           The minimum vote weight of your voters
-  --multiPayment=multiPayment Use multi payments over regular transfers
-  --passphrase=passphrase     The passphrase of the wallet used to send your message
   --vendorField=vendorField   The message you want to send to each voter
+  --no-multi                  Send regular transfer instead of multi payments
 ```
 
 ## Credits
