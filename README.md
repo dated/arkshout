@@ -12,6 +12,15 @@ yarn global add @dated/arkshout
 
 ## Usage
 
+### `arkshout start`
+
+Start the CLI.
+
+```
+USAGE
+  $ arkshout start
+```
+
 ### `arkshout config`
 
 Update the configuration
