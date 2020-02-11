@@ -142,6 +142,7 @@ export class MessageCommand extends Command {
                             count += batch.length;
                         }
                     } catch (error) {
+                        console.log(error.message);
                         const response = JSON.parse(error.message);
                         count += response.data.accept.length;
                         this.error(JSON.stringify(response.errors));

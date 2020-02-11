@@ -30,23 +30,33 @@ $ arkshout config:delegate --publicKey=02cb93172a19a66e...
     public async run(): Promise<void> {
         const { flags } = await this.parse(ConfigDelegateCommand);
 
-        let identifier = "";
+        let delegate;
 
         if (flags.username) {
-            identifier = flags.username as string;
+            try {
+                delegate = await ApiService.retrieveDelegate(flags.username as string);
+                flags.username = delegate.username;
+            } catch (error) {
+                this.error("No delegate found with the provided username");
+            }
         }
 
         if (flags.publicKey) {
             if (!this.isValidPublicKey(flags.publicKey as string)) {
                 this.error("The provided public key appears to be invalid!");
             }
-            identifier = flags.publicKey as string;
+
+            try {
+                await ApiService.retrieveDelegate(flags.publicKey as string);
+            } catch (error) {
+                this.error("No delegate found with the provided public key");
+            }
         }
 
-        let wallet = await ApiService.retrieveWallet(identifier);
-
         if (flags.username && flags.publicKey) {
-            if (wallet.publicKey !== flags.publicKey) {
+            const delegate = await ApiService.retrieveDelegate(flags.username as string);
+
+            if (delegate.publicKey !== flags.publicKey) {
                 this.error("The provided username and publicKey do not match!");
             }
         }
@@ -81,21 +91,26 @@ $ arkshout config:delegate --publicKey=02cb93172a19a66e...
             ]);
 
             if (response[method]) {
-                wallet = await ApiService.retrieveWallet(response.username || response.publicKey);
-                if (response[method] === "publicKey") {
-                    if (!this.isValidPublicKey(response.publicKey)) {
-                        this.error("The provided public key appears to be invalid!");
-                    }
+                if (!!response.publicKey && !this.isValidPublicKey(response.publicKey)) {
+                    this.error("The provided public key appears to be invalid!");
+                }
+
+                try {
+                    delegate = await ApiService.retrieveDelegate(response.username || response.publicKey);  
+                    flags.publicKey = delegate.publicKey;
+                } catch (error) {
+                    this.error(`No delegate found with the provided ${method}`);
                 }
             } else {
                 this.error(`Please enter a valid ${method} and try again!`);
             }
         }
 
-        ConfigService.set("delegate", flags.publicKey || wallet.publicKey);
+        ConfigService.set("delegate", flags.publicKey || delegate.publicKey);
+
         this.log(
-            `- Success! ${Chalk.greenBright(flags.username || wallet.username)} (${Chalk.greenBright(
-                flags.publicKey || wallet.publicKey,
+            `- Success! ${Chalk.greenBright(flags.username || delegate.username)} (${Chalk.greenBright(
+                flags.publicKey || delegate.publicKey,
             )})`,
         );
     }
