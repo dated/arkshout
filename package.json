@@ -1,7 +1,7 @@
 {
   "name": "@dated/arkshout",
   "description": "Keep in touch with your voters.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "author": "Edgar Goetzendorff @dated",
   "bin": {
     "arkshout": "./bin/run"
