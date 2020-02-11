@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- Pluralization of logs
+- Readme cleanup
+
 ## [0.2.0] - 2020-02-11
 
 ### Changed

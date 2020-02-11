@@ -14,6 +14,7 @@ import TransactionService from "../services/transaction";
 import chunk from "lodash.chunk";
 import cli from "cli-ux";
 import prompts from "prompts";
+import pluralize from "pluralize";
 
 export class MessageCommand extends Command {
     static description = "Send a message to your voters";
@@ -97,7 +98,7 @@ export class MessageCommand extends Command {
         } catch (error) {
             this.error("Failed to retrieve your voters!");
         } finally {
-            cli.action.stop(`retrieved ${voters.length} voters`);
+            cli.action.stop(`retrieved ${pluralize("voter", voters.length, true)}`);
         }
 
         if (voters.length > 0) {

@@ -57,7 +57,7 @@ $ arkshout config:delegate --publicKey=02cb93172a19a66e...
             const delegate = await ApiService.retrieveDelegate(flags.username as string);
 
             if (delegate.publicKey !== flags.publicKey) {
-                this.error("The provided username and publicKey do not match!");
+                this.error("The provided username and public key do not match!");
             }
         }
 

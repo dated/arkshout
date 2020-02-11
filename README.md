@@ -80,7 +80,7 @@ OPTIONS
   --multiPayment=multiPayment   The fee used for multi payments
 
 EXAMPLES
-  Configure the fee used for regular transfer
+  Configure the fee used for regular transfers
   $ arkshout config:fees --transfer=0.0001
 
   Configure the fee used for multi payments
@@ -117,7 +117,7 @@ USAGE
 
 OPTIONS
   --vendorField=vendorField   The message you want to send to each voter
-  --no-multi                  Send regular transfer instead of multi payments
+  --no-multi                  Send regular transfers instead of multi payments
 ```
 
 ## Credits
