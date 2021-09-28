@@ -7,23 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
-- Pluralization of logs
-- Readme cleanup
+-   Pluralization of logs
+-   Readme cleanup
+-   Compatibility with ARK Core v3
 
 ## [0.2.0] - 2020-02-11
 
 ### Changed
 
-- Replace `httpie` with `got`
+-   Replace `httpie` with `got`
 
 ## [0.1.1] - 2020-02-09
 
 ### Fixed
 
-- Typescript errors
+-   Typescript errors
 
 ## [0.1.0] - 2020-02-09
 
 ### Added
 
-- Initial release
+-   Initial release

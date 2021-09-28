@@ -1,6 +1,7 @@
 import Command, { flags } from "@oclif/command";
 import Chalk from "chalk";
 import { Identities, Managers, Utils } from "@arkecosystem/crypto";
+import { chunk, pluralize } from "@arkecosystem/utils";
 import { CommandFlags } from "../types";
 import ConfigService from "../services/config";
 import { confirm } from "../shared/prompts";
@@ -11,10 +12,8 @@ import { ConfigNetworkCommand } from "./config/network";
 import { ConfigPassphraseCommand } from "./config/passphrase";
 import ApiService from "../services/api";
 import TransactionService from "../services/transaction";
-import chunk from "lodash.chunk";
 import cli from "cli-ux";
 import prompts from "prompts";
-import pluralize from "pluralize";
 
 export class MessageCommand extends Command {
     static description = "Send a message to your voters";
@@ -95,7 +94,7 @@ export class MessageCommand extends Command {
         try {
             cli.action.start(`- Retrieving voters with a minimum of ${config.minVote}`);
             voters = await ApiService.retrieveVoters(config.delegate, config.minVote);
-        } catch (error) {
+        } catch {
             this.error("Failed to retrieve your voters!");
         } finally {
             cli.action.stop(`retrieved ${pluralize("voter", voters.length, true)}`);
@@ -143,7 +142,6 @@ export class MessageCommand extends Command {
                             count += batch.length;
                         }
                     } catch (error) {
-                        console.log(error.message);
                         const response = JSON.parse(error.message);
                         count += response.data.accept.length;
                         this.error(JSON.stringify(response.errors));

@@ -7,6 +7,6 @@ export const validNetworks: string[] = Object.keys(Networks).filter(
 export const isValidNetwork = (network: string) => validNetworks.includes(network);
 
 export const defaultHosts: Record<string, string> = {
-    mainnet: "https://explorer.ark.io/api",
-    devnet: "https://dexplorer.ark.io/api",
+    mainnet: "https://wallets.ark.io/api",
+    devnet: "https://dwallets.ark.io/api",
 };

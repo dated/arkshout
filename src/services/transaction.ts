@@ -4,7 +4,7 @@ class TransactionService {
     public buildMultiPayment(recipients: string[], config: Record<string, any>) {
         let transaction = Transactions.BuilderFactory.multiPayment()
             .nonce(config.nonce)
-            .fee(Utils.BigNumber.make(parseFloat(config.fees.multiPayment) * 1e8).toFixed())
+            .fee(Utils.BigNumber.make(Number(config.fees.multiPayment) * 1e8).toFixed())
             .vendorField(config.vendorField);
 
         for (const recipient of recipients) {
@@ -21,7 +21,7 @@ class TransactionService {
             .recipientId(recipient)
             .nonce(config.nonce)
             .amount("1")
-            .fee(Utils.BigNumber.make(parseFloat(config.fees.transfer) * 1e8).toFixed())
+            .fee(Utils.BigNumber.make(Number(config.fees.transfer) * 1e8).toFixed())
             .vendorField(config.vendorField);
 
         transaction = this.signTransaction(transaction, config.passphrases);

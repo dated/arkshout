@@ -36,7 +36,7 @@ $ arkshout config:delegate --publicKey=02cb93172a19a66e...
             try {
                 delegate = await ApiService.retrieveDelegate(flags.username as string);
                 flags.username = delegate.username;
-            } catch (error) {
+            } catch {
                 this.error("No delegate found with the provided username");
             }
         }
@@ -48,7 +48,7 @@ $ arkshout config:delegate --publicKey=02cb93172a19a66e...
 
             try {
                 await ApiService.retrieveDelegate(flags.publicKey as string);
-            } catch (error) {
+            } catch {
                 this.error("No delegate found with the provided public key");
             }
         }
@@ -91,14 +91,14 @@ $ arkshout config:delegate --publicKey=02cb93172a19a66e...
             ]);
 
             if (response[method]) {
-                if (!!response.publicKey && !this.isValidPublicKey(response.publicKey)) {
+                if (Boolean(response.publicKey) && !this.isValidPublicKey(response.publicKey)) {
                     this.error("The provided public key appears to be invalid!");
                 }
 
                 try {
-                    delegate = await ApiService.retrieveDelegate(response.username || response.publicKey);  
+                    delegate = await ApiService.retrieveDelegate(response.username || response.publicKey);
                     flags.publicKey = delegate.publicKey;
-                } catch (error) {
+                } catch {
                     this.error(`No delegate found with the provided ${method}`);
                 }
             } else {
@@ -116,6 +116,6 @@ $ arkshout config:delegate --publicKey=02cb93172a19a66e...
     }
 
     private isValidPublicKey(publicKey: string) {
-        return Identities.PublicKey.validate(publicKey);
+        return Identities.PublicKey.verify(publicKey);
     }
 }

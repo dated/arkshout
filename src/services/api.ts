@@ -1,35 +1,40 @@
-import got from "got";
+import got, { Response } from "got";
 import { Utils } from "@arkecosystem/crypto";
 import ConfigService from "../services/config";
-import { IApiResponse, IApiPostResponse } from "../interfaces";
+import { IApiResponse } from "../interfaces";
 
 class ApiService {
-    private async get(url: string, params?: any) {
-        const body: IApiResponse = await got.get(`${ConfigService.get("host")}/${url}`, params).json();
-        return body;
+    private async get(url: string, params?: any): Promise<IApiResponse> {
+        const response: IApiResponse = await got.get(`${ConfigService.get("host")}/${url}`, params).json();
+
+        return response;
     }
 
-    private async post(url: string, params?: any) {
-        const response: IApiPostResponse = await got.post(`${ConfigService.get("host")}/${url}`, {
+    private async post(url: string, params?: any): Promise<Response<IApiResponse>> {
+        const response = await got.post(`${ConfigService.get("host")}/${url}`, {
             ...params,
             body: JSON.stringify(params.body),
             responseType: "json",
         });
-        return response;
+
+        return response as Response<IApiResponse>;
     }
 
     public async blockchain() {
         const { data } = await this.get("blockchain");
+
         return data;
     }
 
     public async retrieveWallet(id: string) {
         const { data } = await this.get(`wallets/${id}`);
+
         return data;
     }
 
     public async retrieveDelegate(id: string) {
         const { data } = await this.get(`delegates/${id}`);
+
         return data;
     }
 
@@ -40,26 +45,22 @@ class ApiService {
         let next = null;
 
         do {
+            const searchParams = {
+                "balance.from": Utils.BigNumber.make(Number(threshold) * 1e8).toFixed(),
+                "attributes.vote": vote,
+                page,
+            };
+
             // eslint-disable-next-line no-await-in-loop
-            const { body } = await this.post("wallets/search", {
+            const { data, meta } = await this.get("wallets", {
                 headers: { "Content-Type": "application/json" },
-                query: {
-                    page,
-                },
-                body: {
-                    vote,
-                    balance: {
-                        from: Utils.BigNumber.make(threshold)
-                            .times(1e8)
-                            .toFixed(),
-                    },
-                },
+                searchParams,
             });
 
-            next = body.meta?.next;
+            next = meta?.next;
             page++;
 
-            voters.push(...body.data.map((voter: any) => voter.address));
+            voters.push(...data.map((voter: any) => voter.address));
         } while (next);
 
         return voters;

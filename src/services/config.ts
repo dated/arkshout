@@ -35,7 +35,7 @@ class ConfigService {
     private read(): any {
         try {
             return readJsonSync(this.file);
-        } catch (error) {
+        } catch {
             return false;
         }
     }
